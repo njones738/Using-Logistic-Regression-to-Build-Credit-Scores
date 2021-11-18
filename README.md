@@ -1,56 +1,33 @@
 # Personal data projects
 
-Use this template repo for your personal data projects. Would you please use the following format for your repository? Please name your repository in your personal space using the following naming structure `[title]-[lastname]-[languagesused]`.  You will then complete a pull request to move your personal data projects into our organization.
+A copy of the report is provided in this repo and can be downloaded [here](https://github.com/njones738/Using-Logistic-Regression-to-Build-Credit-Scores/raw/main/documents/Binary.Classification.Modeling.Deliverable.NATHANIELJONES.docx).
 
-- __Project Purpose:__ Take one to two paragraphs to explain your goals.  Why did you use this data? What skills are you going to demonstrate? Did you do this work for a client? 
-- __Tools used:__ Provide an overview of the programming languages and packages you leveraged for this work.  You could provide links to the pertinent reading material that you leveraged to complete the job. Provide links to your final scripts stored in your repository.
-- __Results:__ This is your conclusion.  Explain why your work matters.  How could others use it?  What are your next steps? Show some key findings.
+- __Project Purpose:__  
+The purpose of this report is to create a model that predict a customer’s credit score to maximize the profitability of granting credit. The original data contained over 1.2 million observations with over 300 parameters for each. SAS and Python was used during this project. A binary predictor was used to indicate whether a customer was considered a credit risk. This predictor was created from the customers’ delinquency status on payments. Initially, the data needed to be recoded and cleaned of missing and coded values. Parameters with a low enough proportion of missing or coded data had the median calculated and put in place of any missing or coded value. Parameters with a proportion too high were removed to avoid imputing a significant portion of the parameter. The remaining parameters underwent the process of variable clustering to further reduce the number of parameters that will be used in the model.
+The next phase transformed the parameters to create additional forms. The forms were included to see if they yielded significant results in the final model. Some of these transformations included creating discrete indicators for variables which were originally continuous and calculating the odds of the variables. Two methods were used to in creating these transformations: an automatic process using a procedure in SAS and a user process.
+The last phase of the project, a logistic regression model was run on the parameters and the different transformed versions in the dataset. The main metric used to assess the performance of the models created were the percent of concordant observations, the Kolmogorov-Smirnov statistic, the Chi-Squared statistic, and most importantly, profit. From this logistic regression, two simpler models were created to reduce model complexity. To assess the consistency of the model performance it was split into a training and a validation subset.
+
+- __Tools used:__   
+SAS was used to conduct the cleaning of missing values, manipulation of the parameters, and the analysis. In addition, Python was ued to interpolate thee threshhold used during the imputation step.
+- __Results:__      
+An analysis of the profitability was the conducted by looking at the number of correct customers predicted to not default, which earns the company a mean revenue of $250 per customer. Of those that do default but were predicted to be low rick customers, it was determined that every 1000 customers who are extended credit yield an average profit of $115,303.14. In addition to the model, a reduced model that included twenty parameters yield an average profit of $112,777 per 1000 customers. This less than $3000 off the initial models profit per 1000 customers and this model is much less complex meaning it is easier to interpret and explain to potential customers. 
 
 ## Folder structure
 
 ```
 - readme.md
-- scripts
----- readme.md (short description of each script)
----- data_munge.R
----- data_munge.py
----- eda.R
----- model.py
 - data (less than 100 Mb)
----- readme.md (links to data larger than 100 Mb and data details.)
----- crimes.csv
----- visits.json
+---- interpolate.csv
 - documents
----- readme.md (notes while doing your project)
----- mlmethod.pdf
----- api_guide.pdf
+---- Binary.Classification.Modeling.Deliverable.NATHANIELJONES.docx
+---- Get.that.number.Nathaiel.Jones.000454394.pptx
+- scripts
+---- FINAL_PROJECT_NATHANIELJONES.sas
+---- Get_that_Numby.sas
+---- Interpolation.py
+---- Next_Step.sas
+---- Phase_2.sas
+---- UNUSEDDEscr_save.log.sas
+---- Descr_save.log.sas
+---- Descritize2MACRO.sas
 ```
-
-## Writing about data science
-
-[Thusan's article on how writing about data science is not easy](https://towardsdatascience.com/lets-admit-it-writing-about-data-science-is-not-easy-37a376777d36) could be helpful as you document your project and skills.
-
-## Data sources
-
-You don't need to make these projects complicated. These projects are built to show your work using the skills you have developed during the course. I would make sure that these are presentable in your Github space. You want to demonstrate your creativity. You could use the following links to find a new data set. 
-
-- [FiveThirtyEight](https://github.com/fivethirtyeight/data)
-- [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
-- [WorkoutWednesday](http://www.workout-wednesday.com/)
-- [Kaggle](https://www.kaggle.com/datasets)
-- [data.world](https://data.world/search?context=community&entryTypeLabel=dataset&q=free+data&type=all)
-
-## Github pages
-
-It would help if you took the time to publish your repo for easier viewing of the files.  Please follow the directions at [Github pages](https://pages.github.com/) to build your pages footprint on the internet.
-
-## Questions
-
-### Is the expectation of our personal projects similar to that of the class projects we are completing?
-
-Yes & No. Here are a few points to highlight the comparison
-
-1. Three different data sets is the main criteria. Hopefully different challenges to your skills and the data can be in the same area for all three if you desire.
-2. You can choose the language. Please choose based on where you want employment.
-3. We don't get much into the story telling with our class projects.  But, I would hope you tell a story that includes some graphs and analysis.
-4. Think of these as sales pitches for future employment. Your personal projects should be in your own Github space.
