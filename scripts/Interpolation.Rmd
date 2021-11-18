@@ -1,0 +1,173 @@
+---
+title: "Interpolation"
+author: "Nathaniel Jones"
+date: "2/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library('reticulate')
+library('tidyverse')
+library('ggplot2')
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+the_frame = pd.read_csv(r'C:\Users\nater\OneDrive\Documents\R\Interpolate\interpolate.csv')
+the_frame
+```
+
+```{python }
+def sigmX(varX,xponent):
+  namX = sum( ((varX)**xponent) )    # Sigma(  (xk**i))
+  return (namX)
+# -----------------------------------------------------------------------------------------------------------------------
+def sigmY(varX,varY,xponent): # Take the variables & return the special sum
+  namY = sum( (varY)*((varX)**xponent) ) # Sigma(yk(xk**i))
+  namX = sum( ((varX)**xponent) )    # Sigma(  (xk**i))
+  return (namY)       # return Sigma(yk(xk**i)), Sigma((xk**i))
+# -----------------------------------------------------------------------------------------------------------------------
+def eval_equ(x,coef):
+  ay = [] # create an empty
+  l = (len(coef))-1 # len(coef) will return the desired exponent +1. so we -1 to compensate.
+  for i in range(l+1): # but we want to use every coefficient so l+1 here.
+    t = coef[i]*(x**(l-i)) # l-i. Goes down by one each iteration from the desired exponent created 2 lines above.
+    ay.append(t)
+  return sum(ay) # sum together to get the evaluation of x. 
+ # -----------------------------------------------------------------------------------------------------------------------
+
+```
+
+```{python }
+def n_tur_pole8(x,y,n):
+  A = pd.DataFrame()
+  for i in range(n+1):
+    Ai = []
+    for j in range(n+1):
+      Aij = sigmX(x,((2*(n))-j-i))
+      Ai.append(Aij)
+#      print(Ai)
+    A[i] = Ai
+  r = []
+  for i in range(n+1):
+    ri = sigmY(x,y,((n)-i))
+    r.append(ri)
+  r = np.array(r).reshape(-1,1)
+  product = np.matmul(np.linalg.inv(A),r)
+#  print(pd.DataFrame(A))
+  return list(product)
+# -----------------------------------------------------------------------------------------------------------------------
+def get_adjusted(x,y,n):
+  yhat = []
+  residual_vector = []
+  Totals_vector = []
+  av_rage = y.mean()
+  l = len(y)
+  enter_polate = n_tur_pole8(x,y,n)
+  p = len(enter_polate)
+  for i in range(len(x)): # This makes yhat
+    xx = eval_equ(x[i],enter_polate)
+    yhat.append(xx) 
+  for i in range(len(y)): # This makes residuals: sigma((y - yhat)**2)
+    resi = (y[i] - yhat[i])**2
+    residual_vector.append(resi)
+  for i in range(len(y)): # This makes Sum of Square Totals: sigma((y - mu)**2)
+    toti = (y[i] - av_rage)**2
+    Totals_vector.append(toti)
+    
+  # This makes the adj-R**2 value
+  SSE = sum(residual_vector)
+  SST = sum(Totals_vector)
+  SSR = SST - SSE
+  R_Squ = 1 - (SSE/SST)
+  adj_R_Squ =  1 - ( ( (SSE)/( (l) - (p) ) )/( (SST)/( (l) - (1) ) ) ) 
+  return adj_R_Squ # ,(SSE/SST),SSE,SST
+
+```
+
+```{python }
+def drivative(coef):
+  ret = []
+  l = len(coef)
+  for i in range(l-1):
+    urn = (coef[i])*((l-1)-i)
+    ret.append(urn)
+  return ret
+def sec_derivative(coef):
+  coefprime = drivative(coef)
+  return drivative(coefprime)
+def functy(ceof): return lambda x: ceof[0]*(x**(10)) + ceof[1]*(x**(9)) + ceof[2]*(x**(8)) + ceof[3]*(x**(7)) + ceof[4]*(x**(6)) + ceof[5]*(x**(5)) + ceof[6]*(x**(4)) + ceof[7]*(x**(3)) + ceof[8]*(x**(2)) + ceof[9]*(x**(1)) + ceof[10]*(x**(0))
+```
+
+```{python }
+done_it = []
+for i in range(15):
+  pwer = i+1
+  do_it = get_adjusted(the_frame['x'],the_frame['y'],(i+1))
+  done_it.append([do_it,pwer,i])
+
+pd.DataFrame(done_it)
+max(pd.DataFrame(done_it)[0])
+```
+
+```{python }
+
+ffff = n_tur_pole8(the_frame['x'],the_frame['y'],3)
+the_frame['fx'] = eval_equ(the_frame['x'],ffff)
+functyy = functy(ffff)
+sec_der_the_frame = sec_derivative(ffff)
+eval_equ(.4284,sec_der_the_frame)
+eval_equ(.428451,sec_der_the_frame)
+eval_equ(.4285,sec_der_the_frame)
+```
+
+```{python }
+def binom_method(aa,bb,cf,kmax,tol):
+  a = aa
+  b = bb
+  m = (b+a)/2
+  frm = []
+  for i in range(kmax):
+    fa = eval_equ(a,cf)
+    fb = eval_equ(b,cf)
+    fm = eval_equ(m,cf)
+    frm.append([i,a,m,b,fa,fm,fb])
+    iterate = i
+    if fm*fb > 0:
+      b = m
+      m = (b+a)/2
+    elif fm*fb < 0:
+      a = m
+      m = (b+a)/2
+    elif abs(fm) < tol:
+      return 
+  if iterate >= kmax:
+    prt = "Increase tolerance and Update endpoints \n"
+  elif iterate < kmax:
+    prt = "Bisection method has converged \n"
+  return print(prt), [i,a,m,b,fa,fm,fb]
+
+
+
+
+
+```
+
+```{python }
+f = binom_method(.4,.5,sec_der_the_frame,1000000,(.0000000000000001))
+f
+```
+
+```{r }
+
+```
+
+
+
+
+
+
+
