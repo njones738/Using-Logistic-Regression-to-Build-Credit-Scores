@@ -1,6 +1,6 @@
 # Using Logistic Regression to Build Credit Scores
 
-In the Spring of 2021, I took KSU's Applied Binary Classification Undergraduate Course taught by Professor Michael Frankel sponsored by Equifax. This course used data provided by Equifax to predict which custmers were a good or bad credit risk. A copy of the report is provided in this repo and can be downloaded [here](https://github.com/njones738/Using-Logistic-Regression-to-Build-Credit-Scores/raw/main/documents/Binary.Classification.Modeling.Deliverable.NATHANIELJONES.docx).
+In the Spring of 2021, I took KSU's Applied Binary Classification Undergraduate Course taught by Professor Michael Frankel sponsored by Equifax. This course used data provided by Equifax to predict which custmers were a good or bad credit risk. A copy of the report is provided in this repo and can be downloaded [here]().
 
 ### __Project Purpose:__  
 
